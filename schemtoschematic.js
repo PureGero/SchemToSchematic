@@ -1770,7 +1770,7 @@ function schemtoschematic(arrayBuffer, callback) {
         moveTileEntities(root);
         convertBlockData(root);
 
-        zlib.deflate(new Uint8Array(nbt.writeUncompressed(root)), function(error, data) {
+        zlib.gzip(new Uint8Array(nbt.writeUncompressed(root)), function(error, data) {
             if (error) { throw error; }
             
             callback(data);

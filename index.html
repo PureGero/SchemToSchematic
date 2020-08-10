@@ -14,12 +14,9 @@
         <script>
             function upload(input) {
                 var file = input.files[0];
-                console.log(file);
                 var fr = new FileReader();
                 fr.onload = function() {
-                    schemtoschematic(fr.result, function(data) {
-                        console.log(data);
-                        
+                    schemtoschematic(fr.result, function(data) {                        
                         var name = file.name;
                         
                         if (~name.lastIndexOf('.')) {
