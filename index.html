@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Schem to Schematic</title>
+        
+        <!-- https://github.com/kpanuragh/zlib -->
+        <script src="zlib.js"></script>
+        
+        <!-- https://github.com/sjmulder/nbt-js -->
+        <script src="nbt.js"></script>
+        
+        <script src="schemtoschematic.js"></script>
+        
+        <script>
+            function upload(input) {
+                var file = input.files[0];
+                console.log(file);
+                var fr = new FileReader();
+                fr.onload = function() {
+                    schemtoschematic(fr.result, function(data) {
+                        console.log(data);
+                        
+                        var name = file.name;
+                        
+                        if (~name.lastIndexOf('.')) {
+                            name = name.substr(0, name.lastIndexOf('.'));
+                        }
+                        
+                        name += '.schematic';
+                        
+                        var blob = new Blob([data], {type: 'application/nbt'});
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = name;
+                        link.click();
+                        link.remove();
+                    });
+                };
+                fr.readAsArrayBuffer(file);
+            }
+        </script>
+    </head>
+    <body>
+        Upload .schem file: <input type="file" onchange="upload(this)"/><br/>
+        <small>Privacy note: All schematics uploaded stay on your local machine and aren't processed by any server</small>
+    </body>
+</html>
