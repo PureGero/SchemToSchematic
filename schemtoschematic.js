@@ -1657,6 +1657,7 @@ function schemtoschematic(arrayBuffer, callback) {
         }
         
         // Not in the table, try to find a match
+        var originalKey = namespaceKey;
         var index;
         
         if (~(index = namespaceKey.indexOf('shape='))) {
@@ -1687,36 +1688,28 @@ function schemtoschematic(arrayBuffer, callback) {
             namespaceKey = 'minecraft:red_bed' + namespaceKey.substr(namespaceKey.indexOf('[', index));
         }
         
-        if (~(index = namespaceKey.indexOf('east=true'))) {
+        if (~(index = namespaceKey.indexOf('_wall_head'))) {
+            namespaceKey = 'minecraft:skeleton_wall_skull' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }
+        
+        if (!~(index = namespaceKey.indexOf('_wall_head')) && ~(index = namespaceKey.indexOf('_head'))) {
+            namespaceKey = 'minecraft:skeleton_skull' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('east='))) {
             namespaceKey = namespaceKey.substr(0, index) + 'east=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
-        if (~(index = namespaceKey.indexOf('north=true'))) {
+        if (~(index = namespaceKey.indexOf('north='))) {
             namespaceKey = namespaceKey.substr(0, index) + 'north=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
-        if (~(index = namespaceKey.indexOf('south=true'))) {
+        if (~(index = namespaceKey.indexOf('south='))) {
             namespaceKey = namespaceKey.substr(0, index) + 'south=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
-        if (~(index = namespaceKey.indexOf('west=true'))) {
+        if (~(index = namespaceKey.indexOf('west='))) {
             namespaceKey = namespaceKey.substr(0, index) + 'west=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
-        }
-        
-        if (~(index = namespaceKey.indexOf('east=side')) || ~(index = namespaceKey.indexOf('east=up'))) {
-            namespaceKey = namespaceKey.substr(0, index) + 'east=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
-        }
-        
-        if (~(index = namespaceKey.indexOf('north=side')) || ~(index = namespaceKey.indexOf('north=up'))) {
-            namespaceKey = namespaceKey.substr(0, index) + 'north=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
-        }
-        
-        if (~(index = namespaceKey.indexOf('south=side')) || ~(index = namespaceKey.indexOf('south=up'))) {
-            namespaceKey = namespaceKey.substr(0, index) + 'south=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
-        }
-        
-        if (~(index = namespaceKey.indexOf('west=side')) || ~(index = namespaceKey.indexOf('west=up'))) {
-            namespaceKey = namespaceKey.substr(0, index) + 'west=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
         if (~(index = namespaceKey.indexOf('distance='))) {
@@ -1739,8 +1732,44 @@ function schemtoschematic(arrayBuffer, callback) {
             return blocksNamespace[namespaceKey];
         }
         
+        if (~(index = namespaceKey.indexOf('up=false'))) {
+            tempkey = namespaceKey.substr(0, index) + 'up=true' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+            
+            if (tempkey in blocksNamespace) {
+                return blocksNamespace[tempkey];
+            }
+        }
+        
+        if (~(index = namespaceKey.indexOf('east=false'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'east=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('north=false'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'north=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('south=false'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'south=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('west=false'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'west=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('rotation='))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'rotation=0' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (namespaceKey in blocksNamespace) {
+            return blocksNamespace[namespaceKey];
+        }
+        
         if (~(index = namespaceKey.indexOf('facing=')) && ~namespaceKey.indexOf('hinge=')) {
             tempkey = namespaceKey.substr(0, index) + 'facing=east' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+            
+            if (~(index = tempkey.indexOf('open=true'))) {
+                tempkey = tempkey.substr(0, index) + 'open=false' + tempkey.substr(namespaceKey.indexOf(',', index));
+            }
             
             if (tempkey in blocksNamespace) {
                 return blocksNamespace[tempkey];
@@ -1763,7 +1792,7 @@ function schemtoschematic(arrayBuffer, callback) {
             }
         }
         
-        if (~(index = namespaceKey.indexOf('facing=south'))) {
+        if (~(index = namespaceKey.indexOf('facing='))) {
             tempkey = namespaceKey.substr(0, index) + 'facing=north' + namespaceKey.substr(namespaceKey.indexOf(',', index));
             
             if (tempkey in blocksNamespace) {
@@ -1779,7 +1808,13 @@ function schemtoschematic(arrayBuffer, callback) {
             }
         }
         
-        var error = 'Unknown namespace key: ' + namespaceKey + ', replacing with air.';
+        if (~(index = originalKey.indexOf('powered=true'))) {
+            tempkey = originalKey.substr(0, index) + 'powered=false' + originalKey.substr(originalKey.indexOf(',', index));
+        
+            return convertToLegacyBlockId(tempkey);
+        }
+        
+        var error = 'Unknown namespace key: ' + originalKey + ', replacing with air.';
         
         if (document && document.querySelector) {
             var errorNode = document.querySelector('#error');
