@@ -1699,6 +1699,34 @@ function schemtoschematic(arrayBuffer, callback) {
             namespaceKey = namespaceKey.substr(0, index) + 'west=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
+        if (~(index = namespaceKey.indexOf('east=side'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'east=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('north=side'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'north=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('south=side'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'south=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('west=side'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'west=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('distance='))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'distance=1' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('type='))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'type=single' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('waterlogged=true'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'waterlogged=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
         if (namespaceKey in blocksNamespace) {
             return blocksNamespace[namespaceKey];
         }
