@@ -1683,6 +1683,10 @@ function schemtoschematic(arrayBuffer, callback) {
             namespaceKey = 'minecraft:white_banner' + namespaceKey.substr(namespaceKey.indexOf('[', index));
         }
         
+        if (~(index = namespaceKey.indexOf('_bed'))) {
+            namespaceKey = 'minecraft:red_bed' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }
+        
         if (~(index = namespaceKey.indexOf('east=true'))) {
             namespaceKey = namespaceKey.substr(0, index) + 'east=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
@@ -1719,12 +1723,16 @@ function schemtoschematic(arrayBuffer, callback) {
             namespaceKey = namespaceKey.substr(0, index) + 'distance=1' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
-        if (~(index = namespaceKey.indexOf('type='))) {
+        if (~(index = namespaceKey.indexOf('type=left')) || ~(index = namespaceKey.indexOf('type=right'))) {
             namespaceKey = namespaceKey.substr(0, index) + 'type=single' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
         if (~(index = namespaceKey.indexOf('waterlogged=true'))) {
             namespaceKey = namespaceKey.substr(0, index) + 'waterlogged=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('snowy=true'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'snowy=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
         if (namespaceKey in blocksNamespace) {
@@ -1741,6 +1749,30 @@ function schemtoschematic(arrayBuffer, callback) {
             index = namespaceKey.indexOf('hinge=');
             
             tempkey = namespaceKey.substr(0, index) + 'hinge=right' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+            
+            if (tempkey in blocksNamespace) {
+                return blocksNamespace[tempkey];
+            }
+        }
+        
+        if (~(index = namespaceKey.indexOf('facing=east'))) {
+            tempkey = namespaceKey.substr(0, index) + 'facing=west' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+            
+            if (tempkey in blocksNamespace) {
+                return blocksNamespace[tempkey];
+            }
+        }
+        
+        if (~(index = namespaceKey.indexOf('facing=south'))) {
+            tempkey = namespaceKey.substr(0, index) + 'facing=north' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+            
+            if (tempkey in blocksNamespace) {
+                return blocksNamespace[tempkey];
+            }
+        }
+        
+        if (~(index = namespaceKey.indexOf('half=upper'))) {
+            tempkey = namespaceKey.substr(0, index) + 'half=lower' + namespaceKey.substr(namespaceKey.indexOf(',', index));
             
             if (tempkey in blocksNamespace) {
                 return blocksNamespace[tempkey];
