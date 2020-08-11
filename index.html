@@ -12,28 +12,37 @@
         <script src="schemtoschematic.js"></script>
         
         <script>
-            function upload(input) {
-                var file = input.files[0];
+            function uploadFile(file) {
+                console.log('Processing ' + file.name);
                 var fr = new FileReader();
                 fr.onload = function() {
                     schemtoschematic(fr.result, function(data) {                        
                         var name = file.name;
-                        
+                    
                         if (~name.lastIndexOf('.')) {
                             name = name.substr(0, name.lastIndexOf('.'));
                         }
-                        
+                    
                         name += '.schematic';
-                        
+                    
                         var blob = new Blob([data], {type: 'application/nbt'});
                         var link = document.createElement('a');
                         link.href = window.URL.createObjectURL(blob);
                         link.download = name;
+                        link.innerHTML = 'Download ' + name;
                         link.click();
-                        link.remove();
+                        var li = document.createElement('li');
+                        li.appendChild(link);
+                        document.querySelector('#downloads').appendChild(li);
                     });
                 };
                 fr.readAsArrayBuffer(file);
+            }
+            
+            function upload(input) {
+                for (var i = 0; i < input.files.length; i++) {
+                    uploadFile(input.files[i]);
+                }
             }
         </script>
         
@@ -71,8 +80,9 @@
         <section>
             <h1>Convert .schem files to .schematic files</h1>
             <p>Convert the new worledit 1.13+ .schem files to the legacy .schematic files</p>
-            <label for="file">Upload your .schem file here</label>: <input id="file" type="file" onchange="upload(this)"/><br/>
+            <label for="file">Upload your .schem file here</label>: <input id="file" type="file" onchange="upload(this)" multiple/><br/>
             <small>Privacy notice: All schematics uploaded stay on your local machine and aren't processed by any server</small>
+            <ul id="downloads"></ul>
             <p id="error"></p>
         </scetion>
     </body>
