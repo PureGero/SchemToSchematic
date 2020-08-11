@@ -1699,19 +1699,19 @@ function schemtoschematic(arrayBuffer, callback) {
             namespaceKey = namespaceKey.substr(0, index) + 'west=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
-        if (~(index = namespaceKey.indexOf('east=side'))) {
+        if (~(index = namespaceKey.indexOf('east=side')) || ~(index = namespaceKey.indexOf('east=up'))) {
             namespaceKey = namespaceKey.substr(0, index) + 'east=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
-        if (~(index = namespaceKey.indexOf('north=side'))) {
+        if (~(index = namespaceKey.indexOf('north=side')) || ~(index = namespaceKey.indexOf('north=up'))) {
             namespaceKey = namespaceKey.substr(0, index) + 'north=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
-        if (~(index = namespaceKey.indexOf('south=side'))) {
+        if (~(index = namespaceKey.indexOf('south=side')) || ~(index = namespaceKey.indexOf('south=up'))) {
             namespaceKey = namespaceKey.substr(0, index) + 'south=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
-        if (~(index = namespaceKey.indexOf('west=side'))) {
+        if (~(index = namespaceKey.indexOf('west=side')) || ~(index = namespaceKey.indexOf('west=up'))) {
             namespaceKey = namespaceKey.substr(0, index) + 'west=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
@@ -1747,7 +1747,17 @@ function schemtoschematic(arrayBuffer, callback) {
             }
         }
         
-        console.log('Unknown namespace key: ' + namespaceKey + ', replacing with air.');
+        var error = 'Unknown namespace key: ' + namespaceKey + ', replacing with air.';
+        
+        if (document && document.querySelector) {
+            var errorNode = document.querySelector('#error');
+            
+            if (errorNode && !~errorNode.innerHTML.indexOf(error)) {
+                errorNode.innerHTML += error + '<br/>';
+            }
+        }
+        
+        console.log(error);
         return 0;
     }
     
