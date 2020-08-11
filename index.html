@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>Schem to Schematic</title>
+        <title>Convert .Schem to .Schematic</title>
         
         <!-- https://github.com/kpanuragh/zlib -->
         <script src="zlib.js"></script>
@@ -36,10 +36,44 @@
                 fr.readAsArrayBuffer(file);
             }
         </script>
+        
+        <style>
+            * {
+                font-family: Arial, sans-serif;
+            }
+            
+            html {
+                height: 100%;
+            }
+            
+            body {
+                background: #ddd;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            
+            section {
+                background: white;
+                box-shadow: 0 0 5px #aaa;
+                height: 100%;
+                margin: auto;
+                width: 600px;
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+        </style>
     </head>
     <body>
-        Upload .schem file: <input type="file" onchange="upload(this)"/><br/>
-        <small>Privacy note: All schematics uploaded stay on your local machine and aren't processed by any server</small>
-        <p id="error"></p>
+        <section>
+            <h1>Convert .schem files to .schematic files</h1>
+            <p>Convert the new worledit 1.13+ .schem files to the legacy .schematic files</p>
+            <label for="file">Upload your .schem file here</label>: <input id="file" type="file" onchange="upload(this)"/><br/>
+            <small>Privacy notice: All schematics uploaded stay on your local machine and aren't processed by any server</small>
+            <p id="error"></p>
+        </scetion>
     </body>
 </html>
