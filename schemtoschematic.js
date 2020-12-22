@@ -1740,6 +1740,10 @@ function schemtoschematic(arrayBuffer, callback) {
             }
         }
         
+        if (~(index = namespaceKey.indexOf('axis=x')) || ~(index = namespaceKey.indexOf('axis=z'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'axis=y' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
         if (~(index = namespaceKey.indexOf('east=false'))) {
             namespaceKey = namespaceKey.substr(0, index) + 'east=none' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
