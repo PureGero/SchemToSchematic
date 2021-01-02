@@ -615,6 +615,7 @@ var blocksNamespace = {
 'minecraft:brown_mushroom_block[down=false,east=true,north=false,south=true,up=true,west=false]':1593,
 'minecraft:mushroom_stem[down=false,east=true,north=true,south=true,up=false,west=true]':1610,
 'minecraft:brown_mushroom_block[down=true,east=true,north=true,south=true,up=true,west=true]':1598,
+'minecraft:brown_mushroom_block':1598,
 'minecraft:mushroom_stem[down=true,east=true,north=true,south=true,up=true,west=true]':1615,
 'minecraft:red_mushroom_block[down=false,east=false,north=false,south=false,up=false,west=false]':1613,
 'minecraft:red_mushroom_block[down=false,east=false,north=true,south=false,up=true,west=true]':1601,
@@ -627,6 +628,7 @@ var blocksNamespace = {
 'minecraft:red_mushroom_block[down=false,east=false,north=false,south=true,up=true,west=false]':1608,
 'minecraft:red_mushroom_block[down=false,east=true,north=false,south=true,up=true,west=false]':1609,
 'minecraft:red_mushroom_block[down=true,east=true,north=true,south=true,up=true,west=true]':1614,
+'minecraft:red_mushroom_block':1614,
 'minecraft:iron_bars[east=false,north=false,south=false,waterlogged=false,west=false]':1616,
 'minecraft:glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]':1632,
 'minecraft:melon':1648,
@@ -1740,6 +1742,14 @@ function schemtoschematic(arrayBuffer, callback) {
             }
         }
         
+        if (~(index = namespaceKey.indexOf('up=true'))) {
+            tempkey = namespaceKey.substr(0, index) + 'up=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+            
+            if (tempkey in blocksNamespace) {
+                return blocksNamespace[tempkey];
+            }
+        }
+        
         if (~(index = namespaceKey.indexOf('axis=x')) || ~(index = namespaceKey.indexOf('axis=z'))) {
             namespaceKey = namespaceKey.substr(0, index) + 'axis=y' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
@@ -1816,6 +1826,15 @@ function schemtoschematic(arrayBuffer, callback) {
             tempkey = originalKey.substr(0, index) + 'powered=false' + originalKey.substr(originalKey.indexOf(',', index));
         
             return convertToLegacyBlockId(tempkey);
+        }
+        
+        // How about no block states?
+        if (~(index = originalKey.indexOf('['))) {
+            tempkey = originalKey.substr(0, index);
+        
+            if (tempkey in blocksNamespace) {
+                return blocksNamespace[tempkey];
+            }
         }
         
         var error = 'Unknown namespace key: ' + originalKey + ', replacing with air.';
