@@ -403,6 +403,14 @@ var blocksNamespace = {
 'minecraft:cobblestone_stairs[facing=west,half=top,shape=straight,waterlogged=false]':1077,
 'minecraft:cobblestone_stairs[facing=south,half=top,shape=straight,waterlogged=false]':1078,
 'minecraft:cobblestone_stairs[facing=north,half=top,shape=straight,waterlogged=false]':1079,
+'minecraft:polished_andesite_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]':1072,
+'minecraft:polished_andesite_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]':1073,
+'minecraft:polished_andesite_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]':1074,
+'minecraft:polished_andesite_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]':1075,
+'minecraft:polished_andesite_stairs[facing=east,half=top,shape=straight,waterlogged=false]':1076,
+'minecraft:polished_andesite_stairs[facing=west,half=top,shape=straight,waterlogged=false]':1077,
+'minecraft:polished_andesite_stairs[facing=south,half=top,shape=straight,waterlogged=false]':1078,
+'minecraft:polished_andesite_stairs[facing=north,half=top,shape=straight,waterlogged=false]':1079,
 'minecraft:wall_sign[facing=north,waterlogged=false]':1090,
 'minecraft:wall_sign[facing=south,waterlogged=false]':1091,
 'minecraft:wall_sign[facing=west,waterlogged=false]':1092,
@@ -1672,6 +1680,10 @@ function schemtoschematic(arrayBuffer, callback) {
         
         if (~(index = namespaceKey.indexOf('_wall_sign'))) {
             namespaceKey = 'minecraft:wall_sign' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('_trapdoor'))) {
+            namespaceKey = 'minecraft:oak_trapdoor' + namespaceKey.substr(namespaceKey.indexOf('[', index));
         }
         
         if (!~namespaceKey.indexOf('wall_sign') && ~(index = namespaceKey.indexOf('_sign'))) {
