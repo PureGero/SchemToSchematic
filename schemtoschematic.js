@@ -1,5 +1,9 @@
 if (typeof nbt === 'undefined') {
-    nbt = require('nbt');
+    nbt = require('./nbt');
+}
+
+if (typeof zlib === 'undefined') {
+    zlib = require('zlib');
 }
 
 var blocksNamespace = {
@@ -1906,6 +1910,6 @@ function schemtoschematic(arrayBuffer, callback) {
     });
 }
 
-if (typeof exports !== 'undefined') {
-    exports = schemtoschematic;
+if (typeof module !== 'undefined') {
+    module.exports = schematictoschem;
 }
