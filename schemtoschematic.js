@@ -1911,5 +1911,5 @@ function schemtoschematic(arrayBuffer, callback) {
 }
 
 if (typeof module !== 'undefined') {
-    module.exports = schematictoschem;
+    module.exports = schemtoschematic;
 }
