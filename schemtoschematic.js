@@ -1357,6 +1357,7 @@ var blocksNamespace = {
 'minecraft:beetroots[age=2]':3314,
 'minecraft:beetroots[age=3]':3315,
 'minecraft:grass_path':3328,
+'minecraft:dirt_path':3328,
 'minecraft:end_gateway':3344,
 'minecraft:repeating_command_block[conditional=false,facing=down]':3360,
 'minecraft:repeating_command_block[conditional=false,facing=up]':3361,
