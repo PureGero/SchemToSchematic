@@ -1702,7 +1702,74 @@ function schemtoschematic(arrayBuffer, callback) {
         if (!~(index = namespaceKey.indexOf('_wall_head')) && ~(index = namespaceKey.indexOf('_head'))) {
             namespaceKey = 'minecraft:skeleton_skull' + namespaceKey.substr(namespaceKey.indexOf('[', index));
         }
+
+        //More supports
+        //About stone
+        if (~(index = namespaceKey.indexOf('smooth_sandstone_slab'))) {
+            //recommend: meta=1
+            namespaceKey = namespaceKey.substr(0, index) + 'stone_slab' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }
+
+        if (~(index = namespaceKey.indexOf('smooth_sandstone_stairs'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'sandstone_stairs' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }
+
+        if (~(index = namespaceKey.indexOf('stone_brick_wall'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'cobblestone_wall' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }     
         
+        if (~(index = namespaceKey.indexOf('sandstone_wall'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'birch_fence' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }     
+
+        if (~(index = namespaceKey.indexOf('lantern'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'redstone_lamp' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }  
+        //-----
+        if (~(index = namespaceKey.indexOf('diorite_wall'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'cobblestone_wall' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        } 
+
+        if (~(index = namespaceKey.indexOf('smooth_quartz_slab'))) {
+            //recommend: meta=7
+            namespaceKey = namespaceKey.substr(0, index) + 'stone_slab' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        } 
+
+        
+        if (~(index = namespaceKey.indexOf('polished_andesite_stairs'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'quartz_stairs' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        } 
+
+        //About wood
+        if (~(index = namespaceKey.indexOf('stripped_spruce_wood'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'spruce_wood' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }
+
+        if (~(index = namespaceKey.indexOf('stripped_spruce_log'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'oak_log' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }
+        
+        if (~(index = namespaceKey.indexOf('birch_trapdoor'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'oak_trapdoor' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        } 
+
+        if (~(index = namespaceKey.indexOf('jungle_trapdoor'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'oak_trapdoor' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        } 
+
+        if (~(index = namespaceKey.indexOf('spruce_trapdoor'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'oak_trapdoor' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        } 
+
+        if (~(index = namespaceKey.indexOf('note_block'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'noteblock' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+        }
+
+        //State convert
+        if (~(index = namespaceKey.indexOf('in_wall=true'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'in_wall=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+
         if (~(index = namespaceKey.indexOf('east='))) {
             namespaceKey = namespaceKey.substr(0, index) + 'east=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
