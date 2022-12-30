@@ -1719,11 +1719,11 @@ function schemtoschematic(arrayBuffer, callback) {
         }     
         
         if (~(index = namespaceKey.indexOf('sandstone_wall'))) {
-            namespaceKey = namespaceKey.substr(0, index) + 'birch_fence' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+            namespaceKey = 'minecraft:birch_fence[east=false,north=false,south=false,waterlogged=false,west=false]';
         }     
 
         if (~(index = namespaceKey.indexOf('lantern'))) {
-            namespaceKey = namespaceKey.substr(0, index) + 'redstone_lamp' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+            namespaceKey = "minecraft:redstone_lamp[lit=false]";
         }  
         //-----
         if (~(index = namespaceKey.indexOf('diorite_wall'))) {
@@ -1762,7 +1762,7 @@ function schemtoschematic(arrayBuffer, callback) {
         } 
 
         if (~(index = namespaceKey.indexOf('note_block'))) {
-            namespaceKey = namespaceKey.substr(0, index) + 'noteblock' + namespaceKey.substr(namespaceKey.indexOf('[', index));
+            namespaceKey = 'minecraft:note_block[instrument=harp,note=0,powered=false]';
         }
 
         //State convert
