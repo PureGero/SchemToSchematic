@@ -181,6 +181,7 @@ var blocksNamespace = {
 'minecraft:cobweb':480,
 'minecraft:dead_bush':512,
 'minecraft:grass':497,
+'minecraft:short_grass':497,
 'minecraft:fern':498,
 'minecraft:piston[extended=false,facing=down]':528,
 'minecraft:piston[extended=false,facing=up]':529,
