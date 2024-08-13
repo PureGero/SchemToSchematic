@@ -1606,9 +1606,29 @@ var blocksNamespace = {
 };
 
 function schemtoschematic(arrayBuffer, callback) {
+    // Move the width/length/height data to the old location
+    function moveSize(root) {
+        if ('Schematic' in root.value && 'Width' in root.value.Schematic.value) {
+            root.value.Width = root.value.Schematic.value.Width;
+            root.value.Length = root.value.Schematic.value.Length;
+            root.value.Height = root.value.Schematic.value.Height;
+            
+            delete root.value.Schematic.value.Width;
+            delete root.value.Schematic.value.Length;
+            delete root.value.Schematic.value.Height;
+        }
+    }
+
     // Move the schematic offset data to the old location
     function moveOffset(root) {
-        if ('Metadata' in root.value) {
+        if ('Schematic' in root.value && 'Offset' in root.value.Schematic.value) {
+            root.value.WEOffsetX = {type: 'int', value: root.value.Schematic.value.Offset.value[0]};
+            root.value.WEOffsetY = {type: 'int', value: root.value.Schematic.value.Offset.value[1]};
+            root.value.WEOffsetZ = {type: 'int', value: root.value.Schematic.value.Offset.value[2]};
+            delete root.value.Schematic.value.Offset;
+        }
+
+        if ('Metadata' in root.value && 'WEOffsetX' in root.value.Metadata.value) {
             root.value.WEOffsetX = root.value.Metadata.value.WEOffsetX;
             root.value.WEOffsetY = root.value.Metadata.value.WEOffsetY;
             root.value.WEOffsetZ = root.value.Metadata.value.WEOffsetZ;
@@ -1619,6 +1639,21 @@ function schemtoschematic(arrayBuffer, callback) {
     
     // Move the schematic origin data to the old location
     function moveOrigin(root) {
+        if ('Schematic' in root.value && 'Metadata' in root.value.Schematic.value && 'WorldEdit' in root.value.Schematic.value.Metadata.value && 'Origin' in root.value.Schematic.value.Metadata.value.WorldEdit.value) {
+            root.value.WEOriginX = {type: 'int', value: root.value.Schematic.value.Metadata.value.WorldEdit.value.Origin.value[0]};
+            root.value.WEOriginY = {type: 'int', value: root.value.Schematic.value.Metadata.value.WorldEdit.value.Origin.value[1]};
+            root.value.WEOriginZ = {type: 'int', value: root.value.Schematic.value.Metadata.value.WorldEdit.value.Origin.value[2]};
+
+            // Add the offset to the origin
+            if ('WEOffsetX' in root.value) {
+                root.value.WEOriginX.value += root.value.WEOffsetX.value;
+                root.value.WEOriginY.value += root.value.WEOffsetY.value;
+                root.value.WEOriginZ.value += root.value.WEOffsetZ.value;
+            }
+
+            delete root.value.Schematic.value.Metadata.value.WorldEdit.value.Origin;
+        }
+
         if ('Offset' in root.value) {
             root.value.WEOriginX = {type: 'int', value: root.value.Offset.value[0]};
             root.value.WEOriginY = {type: 'int', value: root.value.Offset.value[1]};
@@ -1635,6 +1670,11 @@ function schemtoschematic(arrayBuffer, callback) {
     
     // Move the tile entites to the old location and modify their position and id data
     function moveTileEntities(root) {
+        if ('Schematic' in root.value && 'Blocks' in root.value.Schematic.value && 'BlockEntities' in root.value.Schematic.value.Blocks.value) {
+            root.value.BlockEntities = root.value.Schematic.value.Blocks.value.BlockEntities;
+            delete root.value.Schematic.value.Blocks.value.BlockEntities;
+        }
+
         if ('BlockEntities' in root.value) {
             root.value.TileEntities = root.value.BlockEntities;
             delete root.value.BlockEntities;
@@ -1736,6 +1776,10 @@ function schemtoschematic(arrayBuffer, callback) {
             namespaceKey = namespaceKey.substr(0, index) + 'snowy=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
         }
         
+        if (~(index = namespaceKey.indexOf('in_wall=true'))) {
+            namespaceKey = namespaceKey.substr(0, index) + 'in_wall=false' + namespaceKey.substr(namespaceKey.indexOf(',', index));
+        }
+        
         if (namespaceKey in blocksNamespace) {
             return blocksNamespace[namespaceKey];
         }
@@ -1834,6 +1878,14 @@ function schemtoschematic(arrayBuffer, callback) {
             return convertToLegacyBlockId(tempkey);
         }
         
+        if (~(index = namespaceKey.indexOf('waterlogged='))) {
+            tempkey = namespaceKey.substr(0, index - 1) + namespaceKey.substr(namespaceKey.indexOf(',', index));
+            
+            if (tempkey in blocksNamespace) {
+                return blocksNamespace[tempkey];
+            }
+        }
+        
         // How about no block states?
         if (~(index = originalKey.indexOf('['))) {
             tempkey = originalKey.substr(0, index);
@@ -1859,6 +1911,13 @@ function schemtoschematic(arrayBuffer, callback) {
     
     // Convert the block data to the legacy blocks and data
     function convertBlockData(root) {
+        if ('Schematic' in root.value && 'Blocks' in root.value.Schematic.value && 'Data' in root.value.Schematic.value.Blocks.value) {
+            root.value.Palette = root.value.Schematic.value.Blocks.value.Palette;
+            root.value.BlockData = root.value.Schematic.value.Blocks.value.Data;
+            delete root.value.Schematic.value.Blocks.value.Palette;
+            delete root.value.Schematic.value.Blocks.value.Data;
+        }
+
         if ('Palette' in root.value && 'BlockData' in root.value) {
             var palette = [];
         
@@ -1898,6 +1957,11 @@ function schemtoschematic(arrayBuffer, callback) {
     nbt.parse(arrayBuffer, function(error, root) {
         if (error) { throw error; }
 
+        if ('Schematic' in root.value) {
+            root.name = 'Schematic';
+        }
+
+        moveSize(root);
         moveOffset(root);
         moveOrigin(root);
         setMaterials(root);
